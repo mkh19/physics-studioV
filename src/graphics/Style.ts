@@ -8,31 +8,22 @@ export class Style {
     private static readonly DEFAULT_STROKE = "#000000";
 
     private static readonly DEFAULT_LINE_WIDTH = 1;
-    private readonly _style =
-    new Style();
-    private _opacity = 1;
+
+    private static readonly DEFAULT_OPACITY = 1;
+
     private _fill = Style.DEFAULT_FILL;
-    
+
     private _stroke = Style.DEFAULT_STROKE;
-    
-    private _lineWidth =
-    Style.DEFAULT_LINE_WIDTH;
-    
-    
-    
-    // private _lineWidth = 1;
-    
-    public get opacity(): number
+
+    private _lineWidth = Style.DEFAULT_LINE_WIDTH;
+
+    private _opacity = Style.DEFAULT_OPACITY;
+
     public get fill(): string {
 
         return this._fill;
 
     }
-    public get style(): Style {
-
-    return this._style;
-
-}
 
     public set fill(
         value: string
@@ -73,62 +64,72 @@ export class Style {
 
     }
 
-    public reset(): void {
+    public get opacity(): number {
 
-        this.fill = "#FFFFFF";
-
-        this.stroke = "#000000";
-
-        this.lineWidth = 1;
+        return this._opacity;
 
     }
 
-    // public clone(): Style {
+    public set opacity(
+        value: number
+    ) {
 
-    //     const style = new Style();
+        this._opacity = Math.min(
+            1,
+            Math.max(0, value)
+        );
 
-    //     style.fill = this.fill;
-    //     style.stroke = this.stroke;
-    //     style.lineWidth = this.lineWidth;
+    }
 
-    //     return style;
+    public reset(): void {
 
-    // }
+        this._fill = Style.DEFAULT_FILL;
+
+        this._stroke = Style.DEFAULT_STROKE;
+
+        this._lineWidth = Style.DEFAULT_LINE_WIDTH;
+
+        this._opacity = Style.DEFAULT_OPACITY;
+
+    }
 
     public copyFrom(
-    other: Style
-): void {
+        other: Style
+    ): void {
 
-    this.fill = other.fill;
+        this.fill = other.fill;
 
-    this.stroke = other.stroke;
+        this.stroke = other.stroke;
 
-    this.lineWidth = other.lineWidth;
+        this.lineWidth = other.lineWidth;
 
-}
-public clone(): Style {
+        this.opacity = other.opacity;
 
-    const style = new Style();
+    }
 
-    style.copyFrom(this);
+    public clone(): Style {
 
-    return style;
+        const style = new Style();
 
-}
-public equals(
-    other: Style
-): boolean {
+        style.copyFrom(this);
 
-    return (
+        return style;
 
-        this.fill === other.fill &&
+    }
 
-        this.stroke === other.stroke &&
+    public equals(
+        other: Style
+    ): boolean {
 
-        this.lineWidth === other.lineWidth
+        return (
 
-    );
+            this.fill === other.fill &&
+            this.stroke === other.stroke &&
+            this.lineWidth === other.lineWidth &&
+            this.opacity === other.opacity
 
-}
+        );
+
+    }
 
 }

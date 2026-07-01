@@ -1,5 +1,5 @@
 import { GraphicObject } from "./GraphicObject";
-
+import { Bounds } from "../geometry";
 /**
  * Represents a collection of graphic objects.
  */
@@ -95,5 +95,89 @@ export class Group extends GraphicObject {
         context.restore();
 
     }
+
+
+    public override getBounds(): Bounds | null {
+
+    if (this._objects.length === 0) {
+
+        return null;
+
+    }
+
+    let bounds: Bounds | null = null;
+
+    for (const object of this._objects) {
+
+        const childBounds =
+            object.getBounds();
+
+        if (!childBounds) {
+
+            continue;
+
+        }
+
+        if (!bounds) {
+
+            bounds =
+                childBounds.clone();
+
+            continue;
+
+        }
+
+        bounds = this.union(
+            bounds,
+            childBounds
+        );
+
+    }
+
+    return bounds;
+
+}
+private union(
+    first: Bounds,
+    second: Bounds
+): Bounds {
+
+    const left =
+        Math.min(
+            first.left,
+            second.left
+        );
+
+    const top =
+        Math.min(
+            first.top,
+            second.top
+        );
+
+    const right =
+        Math.max(
+            first.right,
+            second.right
+        );
+
+    const bottom =
+        Math.max(
+            first.bottom,
+            second.bottom
+        );
+
+    return new Bounds(
+
+        left,
+
+        top,
+
+        right - left,
+
+        bottom - top
+
+    );
+
+}
 
 }

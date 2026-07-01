@@ -1,4 +1,5 @@
 import { GraphicObject } from "./GraphicObject";
+import { Group } from "./Group";
 import { Layer } from "./Layer";
 
 /**
@@ -212,5 +213,103 @@ export class Document {
     );
 
 }
+
+
+
+/**
+ * Returns all objects in the document.
+ */
+public getObjects(): readonly GraphicObject[] {
+
+    const objects: GraphicObject[] = [];
+
+    for (const layer of this._layers) {
+
+    for (const object of layer.objects) {
+
+        this.collectObjects(
+            object,
+            objects
+        );
+
+    }
+
+}
+    return objects;
+
+}
+
+/**
+ * Finds the top-most object at the given position.
+ */
+public findObjectAt(
+    x: number,
+    y: number
+): GraphicObject | null {
+
+    const objects = this.getObjects();
+
+    for (
+
+        let i = objects.length - 1;
+
+        i >= 0;
+
+        i--
+
+    ) {
+
+        const object = objects[i];
+
+        if (!object.visible) {
+
+            continue;
+
+        }
+
+        if (
+
+            object.contains(
+                x,
+                y
+            )
+
+        ) {
+
+            return object;
+
+        }
+
+    }
+
+    return null;
+
+}
+private collectObjects(
+    object: GraphicObject,
+    objects: GraphicObject[]
+): void {
+
+    objects.push(
+        object
+    );
+
+    if (!(object instanceof Group)) {
+
+        return;
+
+    }
+
+    for (const child of object.objects) {
+
+        this.collectObjects(
+            child,
+            objects
+        );
+
+    }
+
+}
+
     
 }

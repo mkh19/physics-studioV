@@ -69,31 +69,8 @@ export class Line extends Shape {
 
     }
 
-    public setStart(
-        x: number,
-        y: number
-    ): void {
-
-        this._start.set(
-            x,
-            y
-        );
-
-    }
-
-    public setEnd(
-        x: number,
-        y: number
-    ): void {
-
-        this._end.set(
-            x,
-            y
-        );
-
-    }
-
-    protected override path(
+    
+    protected override buildPath(
         context: CanvasRenderingContext2D
     ): void {
 

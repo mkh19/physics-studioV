@@ -1,40 +1,40 @@
-import { FreeBodyDiagram } from "../diagrams/FreeBodyDiagram";
 import { ForceDirection } from "../physics/mechanics/ForceDirection";
 import { Force } from "../physics/mechanics/Force";
-
+import { Mass } from "../physics/mechanics/Mass";
+import { GeometryDefaults } from "../defaults";
 /**
- * Arranges the objects inside a free-body diagram.
+ * Arranges the elements of a free-body diagram.
  */
 export class FreeBodyLayout {
 
-    /**
-     * Distance between the body and force origin.
-     */
-    private readonly offset = 60;
+    
 
-    public apply(
-        diagram: FreeBodyDiagram
+    private static readonly LABEL_TOP_OFFSET_X = 30;
+
+    private static readonly LABEL_TOP_OFFSET_Y = -20;
+
+    private static readonly LABEL_BOTTOM_OFFSET_X = 30;
+
+    private static readonly LABEL_BOTTOM_OFFSET_Y = 20;
+
+    private static readonly LABEL_LEFT_OFFSET_X = -60;
+
+    private static readonly LABEL_LEFT_OFFSET_Y = -10;
+
+    private static readonly LABEL_RIGHT_OFFSET_X = 30;
+
+    private static readonly LABEL_RIGHT_OFFSET_Y = -20;
+
+    public layout(
+        mass: Mass,
+        forces: readonly Force[]
     ): void {
 
-        const body = diagram.mass;
-
-        const centerX =
-            body.body.width / 2;
-
-        const centerY =
-            body.body.height / 2;
-
-        body.transform.position.set(
-            0,
-            0
-        );
-
-        for (const force of diagram.forces) {
+        for (const force of forces) {
 
             this.layoutForce(
-                force,
-                centerX,
-                centerY
+                mass,
+                force
             );
 
         }
@@ -42,58 +42,109 @@ export class FreeBodyLayout {
     }
 
     private layoutForce(
-        force: Force,
-        x: number,
-        y: number
+        mass: Mass,
+        force: Force
     ): void {
 
+        const width = mass.body.width;
+
+        const height = mass.body.height;
+
         switch (force.direction) {
-
-            case ForceDirection.Right:
-
-                force.transform.position.set(
-                    x,
-                    y
-                );
-
-                force.transform.rotation = 0;
-
-                break;
-
-            case ForceDirection.Left:
-
-                force.transform.position.set(
-                    x,
-                    y
-                );
-
-                force.transform.rotation = Math.PI;
-
-                break;
 
             case ForceDirection.Up:
 
                 force.transform.position.set(
-                    x,
-                    y
+                    width / 2,
+                    -GeometryDefaults.DIAGRAM_GAP
                 );
 
-                force.transform.rotation = -Math.PI / 2;
+                force.transform.rotation =
+                    -Math.PI / 2;
 
                 break;
 
             case ForceDirection.Down:
 
                 force.transform.position.set(
-                    x,
-                    y
+                    width / 2,
+                    height + GeometryDefaults.DIAGRAM_GAP
                 );
 
-                force.transform.rotation = Math.PI / 2;
+                force.transform.rotation =
+                    Math.PI / 2;
 
                 break;
 
-            case ForceDirection.Custom:
+            case ForceDirection.Left:
+
+                force.transform.position.set(
+                    -GeometryDefaults.DIAGRAM_GAP,
+                    height / 2
+                );
+
+                force.transform.rotation =
+                    Math.PI;
+
+                break;
+
+            case ForceDirection.Right:
+
+                force.transform.position.set(
+                    width + GeometryDefaults.DIAGRAM_GAP,
+                    height / 2
+                );
+
+                force.transform.rotation =
+                    0;
+
+                break;
+
+        }
+
+        this.layoutLabel(force);
+
+    }
+
+    private layoutLabel(
+        force: Force
+    ): void {
+
+        switch (force.direction) {
+
+            case ForceDirection.Up:
+
+                force.label.transform.position.set(
+                    FreeBodyLayout.LABEL_TOP_OFFSET_X,
+                    FreeBodyLayout.LABEL_TOP_OFFSET_Y
+                );
+
+                break;
+
+            case ForceDirection.Down:
+
+                force.label.transform.position.set(
+                    FreeBodyLayout.LABEL_BOTTOM_OFFSET_X,
+                    FreeBodyLayout.LABEL_BOTTOM_OFFSET_Y
+                );
+
+                break;
+
+            case ForceDirection.Left:
+
+                force.label.transform.position.set(
+                    FreeBodyLayout.LABEL_LEFT_OFFSET_X,
+                    FreeBodyLayout.LABEL_LEFT_OFFSET_Y
+                );
+
+                break;
+
+            case ForceDirection.Right:
+
+                force.label.transform.position.set(
+                    FreeBodyLayout.LABEL_RIGHT_OFFSET_X,
+                    FreeBodyLayout.LABEL_RIGHT_OFFSET_Y
+                );
 
                 break;
 

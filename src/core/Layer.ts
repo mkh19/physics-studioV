@@ -4,7 +4,7 @@ import { Group } from "./Group";
  * Represents a document layer.
  */
 export class Layer extends Group {
-    private _visible = true;
+    
     private _name = "";
     private _opacity = 1;
 

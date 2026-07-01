@@ -36,9 +36,7 @@ export abstract class Shape extends GraphicObject {
 
         context.beginPath();
 
-        this.path(
-            context
-        );
+        this.buildPath(context);
 
         this.applyStyle(
             context
@@ -64,7 +62,7 @@ export abstract class Shape extends GraphicObject {
 
     }
 
-    protected abstract path(
+    protected abstract buildPath(
         context: CanvasRenderingContext2D
     ): void;
 

@@ -54,15 +54,15 @@ export class Polygon extends Shape {
 
     }
 
-    protected override path(
+    protected override buildPath(
         context: CanvasRenderingContext2D
     ): void {
 
-        if (this._points.length < 2) {
+        if (this._points.length < 3) {
 
-            return;
+    return;
 
-        }
+}
 
         context.moveTo(
             this._points[0].x,

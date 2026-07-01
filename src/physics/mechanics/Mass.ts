@@ -1,11 +1,18 @@
 import { Rectangle } from "../../graphics/shapes/Rectangle";
 import { TextObject } from "../../graphics/TextObject";
 import { PhysicsObject } from "../PhysicsObject";
+import { GeometryDefaults } from "../../defaults";
 
 /**
  * Represents a physical mass.
  */
 export class Mass extends PhysicsObject {
+
+   
+
+    private static readonly LABEL_OFFSET_X = 30;
+
+    private static readonly LABEL_OFFSET_Y = 35;
 
     private readonly _body = new Rectangle();
 
@@ -15,7 +22,7 @@ export class Mass extends PhysicsObject {
 
     private _unit = "kg";
 
-    constructor(
+    public constructor(
         value: number = 1,
         unit: string = "kg"
     ) {
@@ -23,6 +30,7 @@ export class Mass extends PhysicsObject {
         super();
 
         this._value = value;
+
         this._unit = unit;
 
         this.initialize();
@@ -75,19 +83,25 @@ export class Mass extends PhysicsObject {
 
     private initialize(): void {
 
-        this._body.width = 120;
+        this.add(
+            this._body
+        );
 
-        this._body.height = 60;
+        this.add(
+            this._label
+        );
+
+        this._body.width =
+            GeometryDefaults.MASS_WIDTH;
+
+        this._body.height =
+            GeometryDefaults.MASS_HEIGHT;
 
         this._label.fontSize = 18;
 
         this.centerLabel();
 
         this.updateLabel();
-
-        this.add(this._body);
-
-        this.add(this._label);
 
     }
 
@@ -101,8 +115,8 @@ export class Mass extends PhysicsObject {
     private centerLabel(): void {
 
         this._label.transform.position.set(
-            30,
-            35
+            Mass.LABEL_OFFSET_X,
+            Mass.LABEL_OFFSET_Y
         );
 
     }

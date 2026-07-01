@@ -80,7 +80,7 @@ export class Arc extends Shape {
 
     }
 
-    protected override path(
+    protected override buildPath(
         context: CanvasRenderingContext2D
     ): void {
 

@@ -1,21 +1,23 @@
 import { Group } from "../core/Group";
 import { Force } from "../physics/mechanics/Force";
 import { Mass } from "../physics/mechanics/Mass";
-
+import { FreeBodyLayout } from "../layout";
 /**
  * Represents a free-body diagram.
  */
 export class FreeBodyDiagram extends Group {
 
     private readonly _mass = new Mass();
+    private readonly _layout =
+    new FreeBodyLayout();
 
     private readonly _forces: Force[] = [];
 
-    constructor() {
+    public constructor() {
 
         super();
 
-        this.add(this._mass);
+        this.initialize();
 
     }
 
@@ -31,11 +33,17 @@ export class FreeBodyDiagram extends Group {
 
     }
 
+    public get forceCount(): number {
+
+        return this._forces.length;
+
+    }
+
     public addForce(
         force: Force
     ): void {
 
-        if (this._forces.includes(force)) {
+        if (this.containsForce(force)) {
 
             return;
 
@@ -44,6 +52,7 @@ export class FreeBodyDiagram extends Group {
         this._forces.push(force);
 
         this.add(force);
+        this.updateLayout();
 
     }
 
@@ -65,6 +74,7 @@ export class FreeBodyDiagram extends Group {
         );
 
         this.remove(force);
+        this.updateLayout();
 
     }
 
@@ -77,7 +87,32 @@ export class FreeBodyDiagram extends Group {
         }
 
         this._forces.length = 0;
+        this.updateLayout();
 
     }
+
+    public containsForce(
+        force: Force
+    ): boolean {
+
+        return this._forces.includes(force);
+
+    }
+
+    private initialize(): void {
+
+        this.add(
+            this._mass
+        );
+        
+    }
+    private updateLayout(): void {
+
+    this._layout.layout(
+        this._mass,
+        this._forces
+    );
+
+}
 
 }

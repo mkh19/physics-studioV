@@ -1,5 +1,7 @@
 import { Canvas } from "../canvas";
 import { CanvasRenderer } from "../rendering/CanvasRenderer";
+import { SelectionManager } from "../selection";
+import { HitTester } from "../selection";
 import { Document } from "./Document";
 
 export class PhysicsStudio {
@@ -10,11 +12,19 @@ export class PhysicsStudio {
 
     private readonly _renderer: CanvasRenderer;
 
-    constructor() {
+    private readonly _selection =
+        new SelectionManager();
+
+    private readonly _hitTester =
+        new HitTester();
+
+    public constructor() {
 
         this._renderer = new CanvasRenderer(
             this._canvas.context
         );
+
+        this.initialize();
 
     }
 
@@ -27,6 +37,12 @@ export class PhysicsStudio {
     public get document(): Document {
 
         return this._document;
+
+    }
+
+    public get selection(): SelectionManager {
+
+        return this._selection;
 
     }
 
@@ -45,6 +61,10 @@ export class PhysicsStudio {
         this._renderer.render(
             this.document
         );
+
+    }
+
+    private initialize(): void {
 
     }
 

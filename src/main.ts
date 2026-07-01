@@ -1,33 +1,57 @@
-import { PhysicsStudio } from "./core";
-import { FreeBodyDiagramBuilder } from "./diagrams/FreeBodyDiagramBuilder";
+import {
+    CanvasRenderer
+} from "./rendering/CanvasRenderer";
 
-const studio = new PhysicsStudio();
+import {
+    Document
+} from "./core";
 
-studio.attach(
-    document.body
-);
+import {
+    FreeBodyDiagram
+} from "./diagrams";
 
-const diagram = new FreeBodyDiagramBuilder()
+import {
+    Force,
+    ForceDirection
+} from "./physics/mechanics";
 
-    .mass(5)
+const canvas = document.createElement("canvas");
 
-    .weight(50)
+canvas.width = 1000;
+canvas.height = 700;
 
-    .normal(50)
+document.body.appendChild(canvas);
 
-    .friction(15)
+const context = canvas.getContext("2d")!;
 
-    .applied(20)
+const renderer = new CanvasRenderer(context);
 
-    .build();
+const physicsDocument = new Document();
 
-diagram.transform.position.set(
-    300,
-    200
-);
+physicsDocument.width = canvas.width;
+physicsDocument.height = canvas.height;
 
-studio.document.add(
-    diagram
-);
-studio.render();
+const diagram = new FreeBodyDiagram();
 
+diagram.transform.position.set(300, 200);
+
+const weight = new Force(50, "N");
+weight.direction = ForceDirection.Down;
+
+const normal = new Force(50, "N");
+normal.direction = ForceDirection.Up;
+
+const friction = new Force(15, "N");
+friction.direction = ForceDirection.Left;
+
+const applied = new Force(20, "N");
+applied.direction = ForceDirection.Right;
+
+diagram.addForce(normal);
+diagram.addForce(weight);
+diagram.addForce(friction);
+diagram.addForce(applied);
+
+physicsDocument.add(diagram);
+
+renderer.render(physicsDocument);

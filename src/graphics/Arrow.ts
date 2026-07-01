@@ -1,5 +1,5 @@
-// import { Point } from "../math";
 import { Group } from "../core";
+import { GeometryDefaults } from "../defaults";
 import { Line } from "./shapes/Line";
 
 /**
@@ -7,33 +7,39 @@ import { Line } from "./shapes/Line";
  */
 export class Arrow extends Group {
 
-    private readonly _shaft: Line;
+    private static readonly DEFAULT_LENGTH =
+        GeometryDefaults.ARROW_LENGTH;
 
-    private readonly _headLeft: Line;
+    private static readonly DEFAULT_HEAD_LENGTH =
+        GeometryDefaults.ARROW_HEAD_LENGTH;
 
-    private readonly _headRight: Line;
+    private static readonly DEFAULT_HEAD_WIDTH =
+        GeometryDefaults.ARROW_HEAD_WIDTH;
 
-    private _length: number;
+    private readonly _shaft = new Line();
 
-    constructor(
-        length: number = 120
+    private readonly _headLeft = new Line();
+
+    private readonly _headRight = new Line();
+
+    private _length =
+        Arrow.DEFAULT_LENGTH;
+
+    private _headLength =
+        Arrow.DEFAULT_HEAD_LENGTH;
+
+    private _headWidth =
+        Arrow.DEFAULT_HEAD_WIDTH;
+
+    public constructor(
+        length: number = Arrow.DEFAULT_LENGTH
     ) {
 
         super();
 
-        this._length = length;
+        this.initialize();
 
-        this._shaft = new Line();
-
-        this._headLeft = new Line();
-
-        this._headRight = new Line();
-
-        this.add(this._shaft);
-        this.add(this._headLeft);
-        this.add(this._headRight);
-
-        this.updateGeometry();
+        this.length = length;
 
     }
 
@@ -47,9 +53,50 @@ export class Arrow extends Group {
         value: number
     ) {
 
-        this._length = value;
+        this._length = Math.max(
+            0,
+            value
+        );
 
-        this.updateGeometry();
+        this.updateLayout();
+
+    }
+
+    public get headLength(): number {
+
+        return this._headLength;
+
+    }
+
+    public set headLength(
+        value: number
+    ) {
+
+        this._headLength = Math.max(
+            0,
+            value
+        );
+
+        this.updateLayout();
+
+    }
+
+    public get headWidth(): number {
+
+        return this._headWidth;
+
+    }
+
+    public set headWidth(
+        value: number
+    ) {
+
+        this._headWidth = Math.max(
+            0,
+            value
+        );
+
+        this.updateLayout();
 
     }
 
@@ -71,31 +118,25 @@ export class Arrow extends Group {
 
     }
 
-    public setColor(
-        color: string
-    ): void {
+    private initialize(): void {
 
-        this._shaft.style.stroke = color;
+        this.add(
+            this._shaft
+        );
 
-        this._headLeft.style.stroke = color;
+        this.add(
+            this._headLeft
+        );
 
-        this._headRight.style.stroke = color;
+        this.add(
+            this._headRight
+        );
 
-    }
-
-    public setLineWidth(
-        width: number
-    ): void {
-
-        this._shaft.style.lineWidth = width;
-
-        this._headLeft.style.lineWidth = width;
-
-        this._headRight.style.lineWidth = width;
+        this.updateLayout();
 
     }
 
-    private updateGeometry(): void {
+    private updateLayout(): void {
 
         this._shaft.start.set(
             0,
@@ -103,28 +144,28 @@ export class Arrow extends Group {
         );
 
         this._shaft.end.set(
-            this.length,
+            this._length,
             0
         );
 
         this._headLeft.start.set(
-            this.length,
+            this._length,
             0
         );
 
         this._headLeft.end.set(
-            this.length - 12,
-            -8
+            this._length - this._headLength,
+            -this._headWidth
         );
 
         this._headRight.start.set(
-            this.length,
+            this._length,
             0
         );
 
         this._headRight.end.set(
-            this.length - 12,
-            8
+            this._length - this._headLength,
+            this._headWidth
         );
 
     }

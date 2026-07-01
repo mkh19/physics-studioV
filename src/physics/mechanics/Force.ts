@@ -2,54 +2,45 @@ import { Arrow } from "../../graphics/Arrow";
 import { TextObject } from "../../graphics/TextObject";
 import { PhysicsObject } from "../PhysicsObject";
 import { ForceDirection } from "./ForceDirection";
+
 /**
- * Represents a force vector.
+ * Represents a physical force.
  */
 export class Force extends PhysicsObject {
 
+    private static readonly DEFAULT_MAGNITUDE = 10;
+
+    private static readonly DEFAULT_UNIT = "N";
+
+    private static readonly DEFAULT_FONT_SIZE = 18;
+
+   
+
     private readonly _arrow = new Arrow();
-    private _direction = ForceDirection.Right;
 
     private readonly _label = new TextObject();
 
-    private _magnitude = 0;
+    private _magnitude =
+        Force.DEFAULT_MAGNITUDE;
 
-    private _unit = "N";
+    private _unit =
+        Force.DEFAULT_UNIT;
 
-    constructor(
-        magnitude: number = 0,
-        label: string = "F"
+    private _direction =
+        ForceDirection.Right;
+
+    public constructor(
+        magnitude: number = Force.DEFAULT_MAGNITUDE,
+        unit: string = Force.DEFAULT_UNIT
     ) {
 
         super();
 
         this._magnitude = magnitude;
 
-        this._arrow.length = 120;
-        this._arrow.setColor("#D32F2F");
-        this._arrow.setLineWidth(3);
+        this._unit = unit;
 
-        this._label.text = label;
-        this._label.fontSize = 18;
-        this._label.color = "#D32F2F";
-
-        this.updateLabelPosition();
-        this.updateLabel();
-
-        this.add(this._arrow);
-        this.add(this._label);
-
-    }
-
-    public get arrow(): Arrow {
-
-        return this._arrow;
-
-    }
-
-    public get label(): TextObject {
-
-        return this._label;
+        this.initialize();
 
     }
 
@@ -63,7 +54,10 @@ export class Force extends PhysicsObject {
         value: number
     ) {
 
-        this._magnitude = value;
+        this._magnitude = Math.max(
+            0,
+            value
+        );
 
         this.updateLabel();
 
@@ -88,41 +82,55 @@ export class Force extends PhysicsObject {
     public get direction(): ForceDirection {
 
         return this._direction;
-        
+
     }
-    
+
     public set direction(
         value: ForceDirection
     ) {
-    
+
         this._direction = value;
-    
+
     }
 
-    public setColor(
-        color: string
-    ): void {
+    public get arrow(): Arrow {
 
-        this._arrow.setColor(color);
+        return this._arrow;
 
-        this._label.color = color;
+    }
+
+    public get label(): TextObject {
+
+        return this._label;
+
+    }
+
+    private initialize(): void {
+
+        this.add(
+            this._arrow
+        );
+
+        this.add(
+            this._label
+        );
+
+        this._label.fontSize =
+            Force.DEFAULT_FONT_SIZE;
+
+        this.updateLabel();
+
+      
 
     }
 
     private updateLabel(): void {
 
         this._label.text =
-            `F = ${this.magnitude} ${this.unit}`;
+            `${this.magnitude} ${this.unit}`;
 
     }
 
-    private updateLabelPosition(): void {
-
-        this._label.transform.position.set(
-            this._arrow.length + 12,
-            5
-        );
-
-    }
+    
 
 }

@@ -1,5 +1,5 @@
 import { Shape } from "../Shape";
-
+import { Bounds } from "../../geometry";
 /**
  * Represents a circle.
  */
@@ -40,7 +40,7 @@ export class Circle extends Shape {
 
     }
 
-    protected override path(
+    protected override buildPath(
         context: CanvasRenderingContext2D
     ): void {
 
@@ -53,5 +53,15 @@ export class Circle extends Shape {
         );
 
     }
+    public override getBounds(): Bounds {
+
+    return new Bounds(
+        -this.radius,
+        -this.radius,
+        this.diameter,
+        this.diameter
+    );
+
+}
 
 }

@@ -1,40 +1,98 @@
-// demo/demo.ts
+import {
+    CanvasRenderer
+} from "../src/rendering/CanvasRenderer";
 
-import { Canvas } from "../src/canvas/Canvas";
-import { PhysicsStudio } from "../src/studio/PhysicsStudio";
+import {
+    Document
+} from "../src/core";
 
-import { Rectangle } from "../src/graphics/shapes/Rectangle";
-import { Circle } from "../src/graphics/shapes/Circle";
-import { TextObject } from "../src/graphics/TextObject";
+import {
+    FreeBodyDiagram
+} from "../src/diagrams";
 
-const canvas = new Canvas(900, 600);
+import {
+    Force,
+    ForceDirection
+} from "../src/physics/mechanics";
 
-document.body.appendChild(canvas.element);
+const canvas = document.querySelector(
+    "canvas"
+) as HTMLCanvasElement;
 
-const studio = new PhysicsStudio(canvas);
+const context = canvas.getContext(
+    "2d"
+)!;
 
-const rectangle = new Rectangle(180, 80);
+const renderer = new CanvasRenderer(
+    context
+);
 
-rectangle.position.set(80, 80);
+const physicsDocument = new Document();
 
-rectangle.fill = "#4CAF50";
+physicsDocument.width = canvas.width;
 
-rectangle.stroke = "#2E7D32";
+physicsDocument.height = canvas.height;
 
-const circle = new Circle(50);
 
-circle.position.set(420, 160);
+const diagram = new FreeBodyDiagram();
 
-circle.fill = "#2196F3";
+diagram.transform.position.set(
+    350,
+    220
+);
 
-const text = new TextObject("Physics Studio");
+const up = new Force(
+    50,
+    "N"
+);
 
-text.position.set(60, 40);
+up.direction =
+    ForceDirection.Up;
 
-studio.document.add(text);
+const down = new Force(
+    50,
+    "N"
+);
 
-studio.document.add(rectangle);
+down.direction =
+    ForceDirection.Down;
 
-studio.document.add(circle);
+const left = new Force(
+    15,
+    "N"
+);
 
-studio.render();
+left.direction =
+    ForceDirection.Left;
+
+const right = new Force(
+    20,
+    "N"
+);
+
+right.direction =
+    ForceDirection.Right;
+
+diagram.addForce(
+    up
+);
+
+diagram.addForce(
+    down
+);
+
+diagram.addForce(
+    left
+);
+
+diagram.addForce(
+    right
+);
+
+physicsDocument.add(
+    diagram
+);
+
+renderer.render(
+    physicsDocument
+);

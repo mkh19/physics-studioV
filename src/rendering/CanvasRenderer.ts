@@ -1,11 +1,14 @@
 import { Document } from "../core/Document";
 import { GraphicObject } from "../core/GraphicObject";
 import { Renderer } from "./Renderer";
-
+import { SelectionRenderer } from "./SelectionRenderer";
 /**
  * Renders a document using HTML Canvas.
  */
 export class CanvasRenderer extends Renderer {
+
+    private readonly _selectionRenderer =
+    new SelectionRenderer();
 
     constructor(
         private readonly _context: CanvasRenderingContext2D
@@ -49,13 +52,18 @@ export class CanvasRenderer extends Renderer {
     }
 
     protected override renderObject(
-        object: GraphicObject
-    ): void {
+    object: GraphicObject
+): void {
 
-        object.draw(
-            this._context
-        );
+    object.draw(
+        this._context
+    );
 
-    }
+    this._selectionRenderer.render(
+        this._context,
+        object
+    );
+
+}
 
 }

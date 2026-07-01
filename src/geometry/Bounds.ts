@@ -260,5 +260,41 @@ export class Bounds {
         );
 
     }
+    public get area(): number {
+
+    return this.width * this.height;
+
+}
+public get perimeter(): number {
+
+    return 2 * (
+        this.width +
+        this.height
+    );
+
+}
+public offset(
+    dx: number,
+    dy: number
+): void {
+
+    this.x += dx;
+
+    this.y += dy;
+
+}
+public inflate(
+    amount: number
+): void {
+
+    this.x -= amount;
+
+    this.y -= amount;
+
+    this.width += amount * 2;
+
+    this.height += amount * 2;
+
+}
 
 }

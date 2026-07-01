@@ -10,7 +10,7 @@ export abstract class GraphicObject {
 
     
     
-   
+    private _selected = false;
     private readonly _id = crypto.randomUUID();
     private readonly _transform = new Transform();
     private readonly _origin = new Origin();
@@ -68,6 +68,20 @@ export abstract class GraphicObject {
 
     }
 
+    public get selected(): boolean {
+
+    return this._selected;
+
+}
+
+public set selected(
+    value: boolean
+) {
+
+    this._selected = value;
+
+}
+
     
     public move(
         dx: number,
@@ -109,9 +123,64 @@ public toggleVisibility(): void {
 
 }
 
+
+
+public select(): void {
+
+    this.selected = true;
+
+}
+
+public deselect(): void {
+
+    this.selected = false;
+
+}
+
+public toggleSelection(): void {
+
+    this.selected = !this.selected;
+
+}
+
+/**
+ * Returns whether the given local point
+ * is inside this object.
+ */
+public contains(
+    x: number,
+    y: number
+): boolean {
+
+    const bounds =
+        this.getBounds();
+
+    if (!bounds) {
+
+        return false;
+
+    }
+
+    return bounds.contains(
+        x,
+        y
+    );
+
+}
+
     public abstract draw(
         context: CanvasRenderingContext2D
     ): void;
 
+
+
+
+
+
+
+
+
+
+    
 
 }

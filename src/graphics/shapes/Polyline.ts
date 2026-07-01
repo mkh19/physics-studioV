@@ -3,25 +3,51 @@ import { Point } from "../../math";
 
 export class Polyline extends Shape {
 
-    constructor(
-        private readonly _points: Point[]
-    ) {
+    private readonly _points: Point[] = [];
 
-        super();
+    constructor(
+    points: Point[] = []
+) {
+
+    super();
+
+    this.setPoints(points);
+
+}
+public setPoints(
+    points: readonly Point[]
+): void {
+
+    this.clear();
+
+    for (const point of points) {
+
+        this.addPoint(point);
 
     }
+
+}
 
     public get points(): readonly Point[] {
 
         return this._points;
 
     }
+    public addPoint(
+    point: Point
+): void {
 
-    protected override path(
+    this._points.push(
+        point.clone()
+    );
+
+}
+
+    protected override buildPath(
         context: CanvasRenderingContext2D
     ): void {
 
-        if (this.points.length === 0) {
+        if (this.points.length === 2) {
 
             return;
 
@@ -42,5 +68,10 @@ export class Polyline extends Shape {
         }
 
     }
+    public clear(): void {
+
+    this._points.length = 0;
+
+}
 
 }

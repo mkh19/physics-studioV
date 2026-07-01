@@ -1,5 +1,5 @@
 import { Shape } from "../Shape";
-
+import { Bounds } from "../../geometry";
 /**
  * Represents a rectangle.
  */
@@ -65,7 +65,7 @@ export class Rectangle extends Shape {
 
     }
 
-    protected override path(
+    protected override buildPath(
         context: CanvasRenderingContext2D
     ): void {
 
@@ -77,5 +77,15 @@ export class Rectangle extends Shape {
         );
 
     }
+    public override getBounds(): Bounds {
+
+    return new Bounds(
+        0,
+        0,
+        this.width,
+        this.height
+    );
+
+}
 
 }
