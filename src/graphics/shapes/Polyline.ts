@@ -1,5 +1,5 @@
 import { Shape } from "../Shape";
-import { Point } from "../../utils/Point";
+import { Point } from "../../math";
 
 export class Polyline extends Shape {
 

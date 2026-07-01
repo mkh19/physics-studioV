@@ -1,16 +1,19 @@
-import { Point } from "../math";
-import { Group } from "./Group";
+// import { Point } from "../math";
+import { Group } from "../core";
 import { Line } from "./shapes/Line";
 
+/**
+ * Represents a reusable arrow.
+ */
 export class Arrow extends Group {
 
-    private readonly _length: number;
+    private readonly _shaft: Line;
 
-    private readonly shaft: Line;
+    private readonly _headLeft: Line;
 
-    private readonly headLeft: Line;
+    private readonly _headRight: Line;
 
-    private readonly headRight: Line;
+    private _length: number;
 
     constructor(
         length: number = 120
@@ -20,59 +23,109 @@ export class Arrow extends Group {
 
         this._length = length;
 
-        this.shaft = new Line(
-            new Point(0, 0),
-            new Point(this.length, 0)
-        );
+        this._shaft = new Line();
 
-        this.headLeft = new Line(
-            new Point(this.length, 0),
-            new Point(this.length - 12, -8)
-        );
+        this._headLeft = new Line();
 
-        this.headRight = new Line(
-            new Point(this.length, 0),
-            new Point(this.length - 12, 8)
-        );
+        this._headRight = new Line();
 
-        this.add(this.shaft);
-        this.add(this.headLeft);
-        this.add(this.headRight);
+        this.add(this._shaft);
+        this.add(this._headLeft);
+        this.add(this._headRight);
+
+        this.updateGeometry();
 
     }
 
-    /**
-     * Arrow length.
-     */
     public get length(): number {
 
         return this._length;
 
     }
 
-    /**
-     * Changes the color of the arrow.
-     */
+    public set length(
+        value: number
+    ) {
+
+        this._length = value;
+
+        this.updateGeometry();
+
+    }
+
+    public get shaft(): Line {
+
+        return this._shaft;
+
+    }
+
+    public get headLeft(): Line {
+
+        return this._headLeft;
+
+    }
+
+    public get headRight(): Line {
+
+        return this._headRight;
+
+    }
+
     public setColor(
         color: string
     ): void {
 
-        this.shaft.stroke = color;
-        this.headLeft.stroke = color;
-        this.headRight.stroke = color;
+        this._shaft.style.stroke = color;
+
+        this._headLeft.style.stroke = color;
+
+        this._headRight.style.stroke = color;
 
     }
 
-    /**
-     * Changes the line width.
-     */
     public setLineWidth(
         width: number
     ): void {
 
-        this.shaft.lineWidth = width;
-        this.headLeft.lineWidth = width;
-        this.headRight.lineWidth = width;
+        this._shaft.style.lineWidth = width;
+
+        this._headLeft.style.lineWidth = width;
+
+        this._headRight.style.lineWidth = width;
+
+    }
+
+    private updateGeometry(): void {
+
+        this._shaft.start.set(
+            0,
+            0
+        );
+
+        this._shaft.end.set(
+            this.length,
+            0
+        );
+
+        this._headLeft.start.set(
+            this.length,
+            0
+        );
+
+        this._headLeft.end.set(
+            this.length - 12,
+            -8
+        );
+
+        this._headRight.start.set(
+            this.length,
+            0
+        );
+
+        this._headRight.end.set(
+            this.length - 12,
+            8
+        );
 
     }
 

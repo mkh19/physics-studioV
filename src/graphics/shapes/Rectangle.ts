@@ -1,10 +1,13 @@
 import { Shape } from "../Shape";
 
+/**
+ * Represents a rectangle.
+ */
 export class Rectangle extends Shape {
 
-    private readonly _width: number;
+    private _width = 120;
 
-    private readonly _height: number;
+    private _height = 60;
 
     constructor(
         width: number = 120,
@@ -13,26 +16,52 @@ export class Rectangle extends Shape {
 
         super();
 
-        this._width = width;
-        this._height = height;
+        this.width = width;
+        this.height = height;
 
     }
 
-    /**
-     * Rectangle width.
-     */
     public get width(): number {
 
         return this._width;
 
     }
 
-    /**
-     * Rectangle height.
-     */
+    public set width(
+        value: number
+    ) {
+
+        this._width = Math.max(
+            0,
+            value
+        );
+
+    }
+
     public get height(): number {
 
         return this._height;
+
+    }
+
+    public set height(
+        value: number
+    ) {
+
+        this._height = Math.max(
+            0,
+            value
+        );
+
+    }
+
+    public setSize(
+        width: number,
+        height: number
+    ): void {
+
+        this.width = width;
+        this.height = height;
 
     }
 

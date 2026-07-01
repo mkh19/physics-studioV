@@ -1,17 +1,20 @@
+import { Point } from "../../math";
 import { Shape } from "../Shape";
-import { Point } from "../../utils/Point";
 
+/**
+ * Represents a polygon.
+ */
 export class Polygon extends Shape {
 
-    private readonly _points: Point[];
+    private readonly _points: Point[] = [];
 
     constructor(
-        points: Point[]
+        points: Point[] = []
     ) {
 
         super();
 
-        this._points = points;
+        this.setPoints(points);
 
     }
 
@@ -21,26 +24,56 @@ export class Polygon extends Shape {
 
     }
 
+    public addPoint(
+        point: Point
+    ): void {
+
+        this._points.push(
+            point.clone()
+        );
+
+    }
+
+    public setPoints(
+        points: readonly Point[]
+    ): void {
+
+        this.clear();
+
+        for (const point of points) {
+
+            this.addPoint(point);
+
+        }
+
+    }
+
+    public clear(): void {
+
+        this._points.length = 0;
+
+    }
+
     protected override path(
         context: CanvasRenderingContext2D
     ): void {
 
-        if (this.points.length === 0) {
+        if (this._points.length < 2) {
 
             return;
 
         }
 
         context.moveTo(
-            this.points[0].x,
-            this.points[0].y
+            this._points[0].x,
+            this._points[0].y
         );
 
-        for (let i = 1; i < this.points.length; i++) {
+        for (let i = 1; i < this._points.length; i++) {
 
             context.lineTo(
-                this.points[i].x,
-                this.points[i].y
+                this._points[i].x,
+                this._points[i].y
             );
 
         }

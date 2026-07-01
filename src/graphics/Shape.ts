@@ -1,46 +1,16 @@
-import { GraphicObject } from "./GraphicObject";
+import { GraphicObject } from "../core";
+import { Style } from "./Style";
 
+/**
+ * Base class for all drawable shapes.
+ */
 export abstract class Shape extends GraphicObject {
 
-    private _fill = "#FFFFFF";
+    private readonly _style = new Style();
 
-    private _stroke = "#000000";
+    public get style(): Style {
 
-    private _lineWidth = 1;
-
-    public get fill(): string {
-
-        return this._fill;
-
-    }
-
-    public set fill(value: string) {
-
-        this._fill = value;
-
-    }
-
-    public get stroke(): string {
-
-        return this._stroke;
-
-    }
-
-    public set stroke(value: string) {
-
-        this._stroke = value;
-
-    }
-
-    public get lineWidth(): number {
-
-        return this._lineWidth;
-
-    }
-
-    public set lineWidth(value: number) {
-
-        this._lineWidth = value;
+        return this._style;
 
     }
 
@@ -51,24 +21,46 @@ export abstract class Shape extends GraphicObject {
         context.save();
 
         context.translate(
-            this.position.x,
-            this.position.y
+            this.transform.position.x,
+            this.transform.position.y
         );
 
-        context.rotate(this.rotation);
+        context.rotate(
+            this.transform.rotation
+        );
+
+        context.scale(
+            this.transform.scale.x,
+            this.transform.scale.y
+        );
 
         context.beginPath();
 
-        this.path(context);
+        this.path(
+            context
+        );
 
-        context.fillStyle = this.fill;
-        context.strokeStyle = this.stroke;
-        context.lineWidth = this.lineWidth;
+        this.applyStyle(
+            context
+        );
 
         context.fill();
+
         context.stroke();
 
         context.restore();
+
+    }
+
+    protected applyStyle(
+        context: CanvasRenderingContext2D
+    ): void {
+
+        context.fillStyle = this.style.fill;
+
+        context.strokeStyle = this.style.stroke;
+
+        context.lineWidth = this.style.lineWidth;
 
     }
 

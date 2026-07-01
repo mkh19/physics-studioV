@@ -1,8 +1,11 @@
-import { GraphicObject } from "./GraphicObject";
+import { GraphicObject } from "../core";
 
+/**
+ * Represents a drawable image.
+ */
 export class ImageObject extends GraphicObject {
 
-    private readonly image = new Image();
+    private readonly _image = new Image();
 
     constructor(
         src: string
@@ -10,19 +13,43 @@ export class ImageObject extends GraphicObject {
 
         super();
 
-        this.image.src = src;
+        this._image.src = src;
 
     }
 
-    protected override onDraw(
+    public get image(): HTMLImageElement {
+
+        return this._image;
+
+    }
+
+    public override draw(
         context: CanvasRenderingContext2D
     ): void {
 
+        context.save();
+
+        context.translate(
+            this.transform.position.x,
+            this.transform.position.y
+        );
+
+        context.rotate(
+            this.transform.rotation
+        );
+
+        context.scale(
+            this.transform.scale.x,
+            this.transform.scale.y
+        );
+
         context.drawImage(
-            this.image,
+            this._image,
             0,
             0
         );
+
+        context.restore();
 
     }
 

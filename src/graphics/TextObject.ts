@@ -1,4 +1,4 @@
-import { GraphicObject } from "./GraphicObject";
+import { GraphicObject } from "../core";
 
 export class TextObject extends GraphicObject {
 
@@ -97,35 +97,41 @@ export class TextObject extends GraphicObject {
     }
 
     public override draw(
-        context: CanvasRenderingContext2D
-    ): void {
+    context: CanvasRenderingContext2D
+): void {
 
-        context.save();
+    context.save();
 
-        context.translate(
-            this.position.x,
-            this.position.y
-        );
+    context.translate(
+        this.transform.position.x,
+        this.transform.position.y
+    );
 
-        context.rotate(this.rotation);
+    context.rotate(
+        this.transform.rotation
+    );
 
-        context.fillStyle = this.color;
+    context.scale(
+        this.transform.scale.x,
+        this.transform.scale.y
+    );
 
-        context.font =
-            `${this.fontSize}px ${this.fontFamily}`;
+    context.fillStyle = this.color;
 
-        context.textAlign = this.align;
+    context.font =
+        `${this.fontSize}px ${this.fontFamily}`;
 
-        context.textBaseline = this.baseline;
+    context.textAlign = this.align;
 
-        context.fillText(
-            this.text,
-            0,
-            0
-        );
+    context.textBaseline = this.baseline;
 
-        context.restore();
+    context.fillText(
+        this.text,
+        0,
+        0
+    );
 
-    }
+    context.restore();
 
+}
 }

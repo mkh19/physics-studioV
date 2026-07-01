@@ -1,4 +1,5 @@
 import { Canvas } from "../canvas";
+import { CanvasRenderer } from "../rendering/CanvasRenderer";
 import { Document } from "./Document";
 
 export class PhysicsStudio {
@@ -6,6 +7,16 @@ export class PhysicsStudio {
     private readonly _canvas = new Canvas();
 
     private readonly _document = new Document();
+
+    private readonly _renderer: CanvasRenderer;
+
+    constructor() {
+
+        this._renderer = new CanvasRenderer(
+            this._canvas.context
+        );
+
+    }
 
     public get canvas(): Canvas {
 
@@ -31,10 +42,8 @@ export class PhysicsStudio {
 
     public render(): void {
 
-        this.canvas.clear();
-
-        this.document.draw(
-            this.canvas.context
+        this._renderer.render(
+            this.document
         );
 
     }
